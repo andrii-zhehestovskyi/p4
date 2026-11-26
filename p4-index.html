@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>P4 · AI assurance case for a lending model — Andrii Zhehestovskyi</title>
+<meta name="description" content="P4 AI assurance case for a lending model: purpose, acceptance criteria and roadmap. Part of the Responsible AI portfolio of Andrii Zhehestovskyi.">
+<link href="https://fonts.googleapis.com/css2?family=Literata:opsz,wght@7..72,600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{color-scheme:light dark;--bg:light-dark(#fff,#0f1217);--ink:light-dark(#10131a,#e8eaf0);--mute:light-dark(#545b6b,#9aa2b4);--line:light-dark(#e3e6ec,#262b36);--soft:light-dark(#f5f6f9,#161a22);--red:light-dark(#c1121f,#ff6b74);--blue:light-dark(#0b4f8a,#6fb0ee);--green:light-dark(#0f7b5b,#4fd1a5)}
+*{box-sizing:border-box;min-width:0}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.6 Inter,system-ui,sans-serif;overflow-x:clip}
+a{color:var(--blue)}
+h1,h2,h3{font-family:Literata,Georgia,serif;font-weight:600;line-height:1.1;margin:0;text-wrap:balance}
+h1{font-size:clamp(32px,5.5vw,50px)}h2{font-size:clamp(22px,3.4vw,30px);margin-bottom:12px}h3{font-size:18px}
+.top{border-bottom:1px solid var(--line);position:sticky;top:0;background:var(--bg);z-index:3}
+.top .in{display:flex;flex-wrap:wrap;gap:6px;align-items:center;padding:8px max(5vw,16px)}
+.top a{text-decoration:none;color:var(--ink);padding:10px 12px;border-radius:8px;min-height:44px;display:inline-flex;align-items:center;font-size:14px}
+.top a[aria-current]{background:var(--ink);color:var(--bg)}
+.top .back{margin-right:auto}
+.band{padding:clamp(28px,4vw,56px) max(5vw,16px)}.soft{background:var(--soft)}
+.in{max-width:1080px;margin:0 auto}
+.hero{display:grid;grid-template-columns:minmax(0,1.2fr) minmax(0,1fr);gap:36px;align-items:center}
+.kick{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-bottom:12px}
+.pill{font-size:13px;padding:3px 10px;border-radius:99px;background:color-mix(in srgb,var(--red) 12%,transparent);color:var(--red);font-weight:600}
+.pill.b{background:var(--soft);color:var(--mute);font-weight:500}
+.q{font-family:Literata,serif;font-size:clamp(19px,2.4vw,23px);line-height:1.35;margin:16px 0 0;padding-left:16px;border-left:4px solid var(--red)}
+.lead{color:var(--mute);max-width:62ch;margin:16px 0 0}
+.badge{aspect-ratio:1;max-width:300px;width:100%;margin:auto;border-radius:50%;display:flex;flex-direction:column;align-items:center;justify-content:center;background:radial-gradient(circle at 35% 30%,color-mix(in srgb,var(--red) 85%,#fff),var(--red));color:#fff;box-shadow:0 20px 50px color-mix(in srgb,var(--red) 30%,transparent)}
+.badge b{font:600 clamp(60px,10vw,96px)/1 Literata,serif}.badge span{opacity:.85;font-size:14px;margin-top:6px}
+.pipe{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-top:20px}
+.pipe div{border:1px solid var(--line);border-radius:10px;padding:8px 12px;font-size:14px;background:var(--bg)}
+.pipe i{color:var(--mute);font-style:normal}
+.grid{display:grid;gap:14px;grid-template-columns:repeat(auto-fit,minmax(min(100%,280px),1fr))}
+.card{border:1px solid var(--line);border-radius:12px;padding:18px;background:var(--bg)}
+.card ul{margin:8px 0 0;padding-left:18px}.card li{margin:3px 0}
+.k{font-size:13px;font-weight:600;color:var(--mute)}
+.sc{border-top:1px solid var(--line);padding:12px 0}.sc:first-child{border-top:0;padding-top:0}.sc p{margin:2px 0 0}
+.scroll{overflow-x:auto;border:1px solid var(--line);border-radius:12px}
+table{width:100%;border-collapse:collapse;font-size:15px;background:var(--bg)}
+th,td{padding:11px 12px;border-bottom:1px solid var(--line);text-align:left;vertical-align:top}
+th{font-size:13px;color:var(--mute);font-weight:600}
+td:first-child{font-weight:600;white-space:nowrap}
+.st{font-size:12px;padding:2px 8px;border-radius:99px;background:var(--soft);color:var(--mute);white-space:nowrap}
+.prog{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:6px}
+.bar{height:10px;border-radius:99px;background:var(--soft);overflow:hidden;border:1px solid var(--line)}
+.bar i{display:block;height:100%;width:14%;background:var(--green)}
+.steps{list-style:none;margin:14px 0 0;padding:0}
+.steps li{display:grid;grid-template-columns:34px minmax(0,1fr) auto;gap:12px;align-items:center;padding:10px 0;border-bottom:1px solid var(--line)}
+.steps .n{width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;border:2px solid var(--line);font-weight:600;font-size:14px}
+.steps .s{font-size:12px;color:var(--mute)}
+.steps li.done .n{background:var(--green);border-color:var(--green);color:#fff}
+.steps li.done .s{color:var(--green);font-weight:600}
+.chips{display:flex;flex-wrap:wrap;gap:6px}.chips span{font-size:14px;border:1px solid var(--line);border-radius:6px;padding:3px 10px;background:var(--bg)}
+.btns{display:flex;flex-wrap:wrap;gap:10px;margin-top:18px}
+.btn{display:inline-flex;align-items:center;min-height:44px;padding:0 18px;border-radius:8px;border:1px solid var(--ink);color:var(--ink);text-decoration:none;font-weight:500}
+.btn.p{background:var(--ink);color:var(--bg)}
+footer{border-top:1px solid var(--line);color:var(--mute);font-size:13px}
+:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
+@media(max-width:720px){.hero{grid-template-columns:minmax(0,1fr)}.badge{max-width:180px}}
+</style>
+</head>
+<body>
+<nav class="top" aria-label="Projects"><div class="in"><a class="back" href="https://andrii-zhehestovskyi.github.io/#projects">← Portfolio</a><a href="../p1/">P1</a> <a href="../p2/">P2</a> <a href="../p3/">P3</a> <a href="../p4/" aria-current="page">P4</a></div></nav>
+
+<section class="band"><div class="in hero">
+<div>
+<div class="kick"><span class="pill">In progress</span><span class="pill b">AI governance</span></div>
+<h1>P4 · AI assurance case for a lending model</h1>
+<p class="q">Is the P1 model acceptable for its stated lending use — and where is the evidence still missing?</p>
+<p class="lead">A claim–argument–evidence assurance case for the P1 credit model in a defined lending use. It links every requirement to a test and to evidence from P1–P3 where available, and records missing evidence openly as assurance gaps.</p>
+<div class="pipe" aria-label="Method"><div>Specification</div><i>→</i><div>Acceptance criteria</div><i>→</i><div>Tests</div><i>→</i><div>Report</div></div>
+</div>
+<div class="badge" aria-hidden="true"><b>P4</b><span>AI governance</span></div>
+</div></section>
+
+<section class="band soft"><div class="in grid">
+<div class="card"><h3>What this project shows an employer</h3><ul><li>AI governance and assurance</li><li>Third-party and lifecycle considerations</li><li>Requirements-to-test traceability</li><li>Clear guidance for non-technical decision-makers</li></ul></div>
+<div class="card"><h3>Scope</h3><div style="margin-top:8px"><div class='sc'><div class='k'>Top-level claim (draft)</div><p>The P1 model is acceptable for supporting pre-approval decisions on small personal loans, under human review, within stated operating conditions</p></div><div class='sc'><div class='k'>Structure</div><p>Context, supporting claims, arguments and evidence, assumptions, gaps and residual risks, third-party considerations, traceability matrix, one-page summary</p></div><div class='sc'><div class='k'>References</div><p>PRA SS1/23, EU AI Act, ISO/IEC 42001:2023, DSIT AI assurance guidance, ICO AI and data protection risk toolkit, GSN</p></div></div></div>
+</div></section>
+
+<section class="band"><div class="in">
+<h2>Acceptance criteria</h2>
+<p class="lead" style="margin:0 0 16px">The project is complete when every criterion has its evidence in the repository.</p>
+<div class="scroll"><table><tr><th>ID</th><th>Criterion</th><th>Evidence</th><th>Status</th></tr><tr><td>AC1</td><td>Every supporting claim has evidence or an explicit &#x27;no evidence yet&#x27; note</td><td>Assurance case</td><td><span class='st'>Planned</span></td></tr><tr><td>AC2</td><td>Traceability matrix covers every requirement</td><td>docs/traceability.csv</td><td><span class='st'>Planned</span></td></tr><tr><td>AC3</td><td>Assumptions and residual risks listed</td><td>Document section</td><td><span class='st'>Planned</span></td></tr><tr><td>AC4</td><td>One-page summary understandable by a non-technical reader</td><td>Peer review note</td><td><span class='st'>Planned</span></td></tr><tr><td>AC5</td><td>One P1 result independently reproduced by a peer</td><td>Review record</td><td><span class='st'>Planned</span></td></tr></table></div>
+</div></section>
+
+<section class="band soft"><div class="in">
+<h2>Roadmap</h2>
+<div class="card">
+<div class="prog"><b>1 of 7 steps</b><span class="k">14%</span></div>
+<div class="bar"><i></i></div>
+<ol class="steps"><li class='done'><span class='n'>1</span><span>Specification and acceptance criteria</span><span class='s'>Done</span></li><li class=''><span class='n'>2</span><span>Context and top-level claim</span><span class='s'>To do</span></li><li class=''><span class='n'>3</span><span>Supporting claims and argument tree</span><span class='s'>To do</span></li><li class=''><span class='n'>4</span><span>Evidence mapping from P1–P3</span><span class='s'>To do</span></li><li class=''><span class='n'>5</span><span>Traceability matrix</span><span class='s'>To do</span></li><li class=''><span class='n'>6</span><span>Gaps, assumptions and residual risks</span><span class='s'>To do</span></li><li class=''><span class='n'>7</span><span>One-page summary and peer review</span><span class='s'>To do</span></li></ol>
+</div>
+</div></section>
+
+<section class="band"><div class="in grid">
+<div class="card"><h3>Tools</h3><div class="chips" style="margin-top:10px"><span>GSN</span><span>ISO/IEC 42001</span><span>DSIT assurance</span><span>ICO AI toolkit</span><span>EU AI Act</span></div></div>
+<div class="card"><h3>Connection to other projects</h3><p style="margin:8px 0 0">Pulls together evidence from P1, P2 and P3.</p>
+<div class="btns"><a class="btn p" href="https://github.com/andrii-zhehestovskyi/p4">View code on GitHub</a><a class="btn" href="https://andrii-zhehestovskyi.github.io/#projects">All projects</a></div></div>
+</div></section>
+
+<footer class="band"><div class="in">Andrii Zhehestovskyi · <a href="https://andrii-zhehestovskyi.github.io">Portfolio</a> · <a href="https://www.linkedin.com/in/andrii-zhehestovskyi-9484063b4/">LinkedIn</a> · Status updated November 2026</div></footer>
+</body>
+</html>
